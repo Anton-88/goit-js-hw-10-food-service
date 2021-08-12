@@ -12,7 +12,6 @@ const body = document.querySelector('body');
 const themeSwitcher = document.querySelector('#theme-switch-toggle');
 
 const drawMenu = data.map(element => {
-
   const addMenuItem = `<li class="menu__item">
     <article class="card" id="${element.id}">
     <img
@@ -48,33 +47,39 @@ const drawMenu = data.map(element => {
 mainMenu.insertAdjacentHTML("beforeend", drawMenu.join(' '));
 
 let isChecked = themeSwitcher.checked;
+// console.log('isChecked :>> ', isChecked);
 
-const themeInStorage = localStorage.getItem("theme");
-console.log('themeInStorage :>> ', themeInStorage);
-if (themeInStorage) {
-  body.classList.add(themeInStorage);
-  if (themeInStorage === Theme.DARK) {
-    localStorage.removeItem("theme");
-    localStorage.setItem("theme", Theme.DARK);
-    isChecked = true;
+function loadSavedTheme() {
+  const themeInStorage = localStorage.getItem("theme");
+  // console.log('themeInStorage :>> ', themeInStorage);
+  if (themeInStorage) {
+    body.classList.add(themeInStorage);
+    if (themeInStorage === Theme.DARK) {
+      localStorage.removeItem("theme");
+      localStorage.setItem("theme", Theme.DARK);
+      isChecked = true;
+      themeSwitcher.checked = isChecked;
+    }
   }
 }
 
 function switchTheme() {
   if (isChecked) {
-    body.classList.add(Theme.DARK);
-    body.classList.remove(Theme.LIGHT);
-    localStorage.removeItem("theme");
-    localStorage.setItem("theme", Theme.DARK);
-  } else {
     body.classList.add(Theme.LIGHT);
     body.classList.remove(Theme.DARK);
     localStorage.removeItem("theme");
     localStorage.setItem("theme", Theme.LIGHT);
+  } else {
+    body.classList.add(Theme.DARK);
+    body.classList.remove(Theme.LIGHT);
+    localStorage.removeItem("theme");
+    localStorage.setItem("theme", Theme.DARK);
   }
   isChecked = !isChecked;
+  themeSwitcher.checked = isChecked;
+  console.log('themeSwitcher.checked :>> ', themeSwitcher.checked);
 }
 
-
+loadSavedTheme();
 themeSwitcher.addEventListener("change", switchTheme);
 
